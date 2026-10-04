@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){function fmt(a){if(a instanceof Error)return a.message;if(typeof a==="object"&&a!==null){try{return JSON.stringify(a)}catch(e){return String(a)}}return String(a)}function send(t,m,l){try{parent.postMessage({__stc:1,type:t,msg:m,line:l},"*")}catch(e){}}["log","info","warn","error"].forEach(function(m){var o=console[m];console[m]=function(){send(m,Array.prototype.map.call(arguments,fmt).join(" "));if(o)o.apply(console,arguments)}});window.addEventListener("error",function(e){send("error",e.message,e.lineno)});window.addEventListener("unhandledrejection",function(e){send("error","Promise: "+fmt(e.reason))});})();</script>
 <style>
 table, td, tr{
   border: 0;
@@ -237,7 +238,7 @@ function build(){
     for(let type of types){
       let classDiff =  get(`classDiff_${k}_${type}`, '');
       let current = get(`current_${k}_${type}`, '-');
-      let diff = get(`diff_${k}_${type}`, '-');
+      let diff = Number(parseFloat(get(`diff_${k}_${type}`, '0')).toFixed(2));
       if(diff > 0) diff = `+${diff}`
       tr += `<td class="${classDiff}"><div class="cur">${current}</div><div class="diff">${diff}</div></td>`;
     }
