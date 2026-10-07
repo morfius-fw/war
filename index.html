@@ -230,7 +230,8 @@ function insert(e, h){
 function build(){
   
   let LIMITKA = parseInt(get('limitka', 1));
-  let BIBLETIKI = parseInt(get('bibletiki', 500)) || 500;
+  let BIBLETIKI = parseInt(get('bibletiki', 500));
+ 
   
   id('time').innerHTML = get('time', '').replace(',', "<br>");
   
