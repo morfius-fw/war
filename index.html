@@ -194,10 +194,18 @@ td {
     <form id="new" onsubmit="saveAccounts(); return false;">
     </form>
 </div>
-<script>
 
-const LIMITKA = true;
-const BIBLETIKI = 500; //0 - не копим
+<div style="margin-top: 20px">
+    <h3>
+        Настройки
+    </h3>
+  <label>Копим на лимитку?</label>
+  <input type="checkbox" id="limitka">
+  <br>
+  <label>Сколько копим библетиков? (0 - не копим)</label>
+  <input type="text" id="bibletiki">
+</div>
+<script>
 
 const types = ['z', 'b', 's', 'k', 't'];
 
@@ -220,6 +228,9 @@ function insert(e, h){
 }
 
 function build(){
+  
+  let LIMITKA = parseInt(get('limitka', 1));
+  let BIBLETIKI = parseInt(get('bibletiki', 500)) || 500;
   
   id('time').innerHTML = get('time', '').replace(',', "<br>");
   
@@ -263,6 +274,9 @@ function build(){
       percent = getProgressPercent(bb, BIBLETIKI);
       insert(tbody, `<tr><td colspan="9999" style="border: none;"><div class="progress" data-label="Собрано ${bb} из ${BIBLETIKI} билетов (${percent})"><span class="value" style="width:${percent};"></span></div></td>`);
     }
+    
+    id("limitka").checked = LIMITKA;
+    id("bibletiki").value = BIBLETIKI;
   }
   
   let f = id('new');
@@ -274,11 +288,23 @@ function build(){
   insert(f, '<div class="zadrot"><input type="text" name="acc[]" value=""></div><input type="submit" value="Сохранить">');
 }
 
-document.addEventListener("DOMContentLoaded", build);
+document.addEventListener("DOMContentLoaded", function(){
+  build();
+  id("limitka").addEventListener('change', (event) => {
+    set('limitka', event.target.checked ? 1 : 0);
+    build();
+  });
+  id("bibletiki").addEventListener('change', (event) => {
+    set('bibletiki', parseInt(event.target.value) || 0);
+    build();
+  });
+  
+});
+
 
 function getProgressPercent(current, total, decimals = 2) {
   if (total === 0) return "0%";
-  return ((current / total) * 100).toFixed(decimals) + "%";
+  return Math.min(((current / total) * 100), 100).toFixed(decimals) + "%";
 }
 
 function saveValues(){
